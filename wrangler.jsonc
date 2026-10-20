@@ -1,0 +1,53 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "alamat-bali-autoblog",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+
+  // Daily at 08:13 Bali time (00:13 UTC). Off-the-hour to avoid peak scheduling.
+  "triggers": { "crons": ["13 0 * * *"] },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "autoblog",
+      "database_id": "c4701ebe-c2f9-440c-9c12-b6314866ad30"
+    }
+  ],
+
+  "workflows": [
+    {
+      "name": "autoblog-publish",
+      "binding": "PUBLISH_WORKFLOW",
+      "class_name": "PublishWorkflow"
+    }
+  ],
+
+  "vars": {
+    // From your Blogger dashboard URL: blogger.com/blog/posts/<BLOG_ID>
+    "BLOG_ID": "4195452520675613778",
+    "BLOG_URL": "https://alamatbalihotel.blogspot.com",
+
+    // "draft" = posts land as drafts for you to review. Switch to "live" once quality is proven.
+    "PUBLISH_MODE": "draft",
+
+    // Posts per cron run
+    "POSTS_PER_RUN": "1",
+
+    // Claude model used by the research/writing agent
+    "CLAUDE_MODEL": "claude-sonnet-5-5",
+
+    // Allowed Blogger labels (comma-separated). The agent must pick one of these.
+    "ALLOWED_LABELS": "Kuta,Legian,Seminyak,Canggu,Jimbaran,Nusa Dua,Uluwatu,Sanur,Denpasar,Ubud,Gianyar,Tabanan,Buleleng,Karangasem,Bangli,Kintamani,Jembrana,Klungkung,Nusa Penida"
+  }
+
+  // Secrets (set with `wrangler secret put <NAME>`):
+  //   ANTHROPIC_API_KEY
+  //   GOOGLE_CLIENT_ID
+  //   GOOGLE_CLIENT_SECRET
+  //   ADMIN_TOKEN              - protects the admin endpoints
+  //   TELEGRAM_BOT_TOKEN       - optional
+  //   TELEGRAM_CHAT_ID         - optional
+  //   NOTIFY_WEBHOOK_URL       - optional (Discord/Slack-style webhook)
+}
