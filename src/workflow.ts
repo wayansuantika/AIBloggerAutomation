@@ -111,7 +111,9 @@ export class PublishWorkflow extends WorkflowEntrypoint<Env, RunParams> {
             JSON.stringify(agent.article.sources), agent.article.notes ?? null, runId,
           ),
         ]);
-        const where = isDraft ? "Draft ready for review in Blogger" : (created.url ?? "Published");
+        const where = isDraft
+          ? `Draft #${topic.id} ready: https://www.blogger.com/blog/post/edit/${env.BLOG_ID}/${created.id}\nApprove with /publish ${topic.id}`
+          : (created.url ?? "Published");
         const notes = agent.article.notes ? `\nAgent notes: ${agent.article.notes.slice(0, 300)}` : "";
         await notify(env, `✅ ${post.title}\n${where}${notes}`);
       });

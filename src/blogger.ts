@@ -93,6 +93,18 @@ export async function insertPost(env: Env, post: NewPost, isDraft: boolean): Pro
   return { id: data.id, url: data.url, status: data.status };
 }
 
+/** Make an existing draft live. Returns the post with its public URL. */
+export async function publishPost(env: Env, postId: string): Promise<ListedPost> {
+  const token = await accessToken(env);
+  const res = await fetch(`${API}/blogs/${env.BLOG_ID}/posts/${postId}/publish`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${token}` },
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`Blogger publish failed (${res.status}): ${text.slice(0, 500)}`);
+  return JSON.parse(text) as ListedPost;
+}
+
 interface ListedPost {
   id: string;
   title: string;

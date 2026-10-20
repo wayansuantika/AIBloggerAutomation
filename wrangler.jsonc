@@ -30,7 +30,7 @@
     "BLOG_URL": "https://alamatbalihotel.blogspot.com",
 
     // "draft" = posts land as drafts for you to review. Switch to "live" once quality is proven.
-    "PUBLISH_MODE": "draft",
+    "PUBLISH_MODE": "live",
 
     // Posts per cron run
     "POSTS_PER_RUN": "1",
