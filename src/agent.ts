@@ -19,25 +19,24 @@ ACCURACY RULES (most important):
 - If you cannot confirm the hotel exists in Bali, set status "not_found". If it is permanently closed, set status "closed".
 - Write everything in your own words. Do not copy sentences from sources.
 
-STRUCTURE for body_html (700-900 words, allowed tags: h2 h3 p ul ol li strong em a table thead tbody tr th td):
-1. <h2> with a descriptive guide heading (e.g. "{Hotel} Guide: Rooms, Facilities & Location in {Area}")
-2. Intro paragraph: what kind of property, where, who it suits.
-3. <h3>Location & How to Get There</h3>: area, nearby landmarks/beaches, approximate travel time from
-   Ngurah Rai International Airport only if a source supports it.
-4. <h3>Rooms & Villas</h3>: room/villa types as a list with key features.
-5. <h3>Facilities</h3>: pools, spa, gym, kids club, etc. as a list.
-6. <h3>Dining</h3>: on-site restaurants/bars, if any.
-7. <h3>Nearby Attractions</h3>: 3-6 nearby places.
-8. Optionally one internal link to a related post from the list provided, written as a natural sentence.
-Do NOT include the address block, map, FAQ, or JSON-LD in body_html; the system adds those.
+STRUCTURE for body_html (350-550 words, scannable, allowed tags: h2 p ul li strong em a):
+1. One intro paragraph (2-3 sentences) that starts with <strong>{Official Hotel Name}</strong>: what kind of
+   property it is, exactly where (beach/village, area), and what makes it stand out.
+2. Then 3-4 <h2> sections about what this property is actually known for, with specific headings
+   (e.g. "Rooms & Private Pool Villas", "Yoga Facilities & Holistic Offerings", "On-Site Dining: {Restaurant Name}").
+   Each section: one short lead-in sentence, then a <ul> where every item is
+   <li><strong>Short Label:</strong> one concrete sentence.</li>
+   A section with a single fact (e.g. one restaurant) can be one short paragraph instead of a list.
+3. Last section <h2>Location &amp; Connectivity</h2>: one lead-in sentence, then a <ul> of nearby places with
+   approximate distance or drive time, including Ngurah Rai International Airport (DPS), only if a source supports it.
+4. Optionally one internal link to a related post from the list provided, written as a natural sentence.
+No filler, no generic travel advice, no conclusion paragraph. Short paragraphs only.
+Do NOT include the address, phone, map, or JSON-LD in body_html; the system adds those.
 
-TITLE: "{Official Hotel Name} {Area}" style, short, no colons or "Ultimate Guide" (the URL slug is made from the title).
-If the official name already contains the area or "Bali", don't repeat it.
+TITLE: "Explore {Official Hotel Name}: {Short Descriptor} Guide" style, under 80 characters, where the descriptor says
+what the place is (e.g. "Explore Udara Bali Yoga Detox & Spa: Oceanfront Wellness Retreat Guide").
 
 SUMMARY: 140-160 characters, plain text, for search snippets.
-
-FAQ: 3-5 short questions travelers actually ask (address, airport distance, family-friendly, beach access...),
-answered only with sourced facts.
 
 Finish by calling submit_post exactly once.
 `.trim();
@@ -51,7 +50,7 @@ function submitTool(allowed: string[]) {
       additionalProperties: false,
       required: [
         "status", "hotel_name", "title", "area", "address", "lat", "lng", "star_rating",
-        "phone", "summary", "body_html", "faq", "sources", "notes",
+        "phone", "summary", "body_html", "sources", "notes",
       ],
       properties: {
         status: { type: "string", enum: ["ok", "not_found", "closed"] },
@@ -66,17 +65,6 @@ function submitTool(allowed: string[]) {
         phone: { type: ["string", "null"], description: "International format, e.g. +62 361 ..." },
         summary: { type: "string" },
         body_html: { type: "string" },
-        faq: {
-          type: "array",
-          minItems: 3,
-          maxItems: 5,
-          items: {
-            type: "object",
-            additionalProperties: false,
-            required: ["q", "a"],
-            properties: { q: { type: "string" }, a: { type: "string" } },
-          },
-        },
         sources: { type: "array", items: { type: "string" }, description: "URLs you actually used" },
         notes: { type: "string", description: "Anything uncertain or conflicting between sources" },
       },

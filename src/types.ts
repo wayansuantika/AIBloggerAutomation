@@ -29,11 +29,6 @@ export interface Topic {
   area: string | null;
 }
 
-export interface Faq {
-  q: string;
-  a: string;
-}
-
 /** What the agent must return via the submit_post tool. */
 export interface AgentArticle {
   status: "ok" | "not_found" | "closed";
@@ -48,7 +43,6 @@ export interface AgentArticle {
   phone: string | null;
   summary: string;
   body_html: string;
-  faq: Faq[];
   sources: string[];
   notes: string;
 }

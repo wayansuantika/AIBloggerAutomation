@@ -28,13 +28,12 @@ export function checkArticle(a: AgentArticle, allowedLabels: string[]): string[]
   const sources = (a.sources ?? []).filter((s) => /^https?:\/\//.test(s));
   if (sources.length < 2) problems.push("fewer than 2 source URLs");
   if (!a.summary || a.summary.length < 80 || a.summary.length > 200) problems.push("summary length out of range");
-  if (!Array.isArray(a.faq) || a.faq.length < 3) problems.push("fewer than 3 FAQ items");
 
   const words = wordCount(a.body_html ?? "");
-  if (words < 500) problems.push(`body too short (${words} words)`);
-  if (words > 1800) problems.push(`body too long (${words} words)`);
+  if (words < 300) problems.push(`body too short (${words} words)`);
+  if (words > 900) problems.push(`body too long (${words} words)`);
 
-  const allText = [a.title, a.summary, a.body_html, ...(a.faq ?? []).map((f) => `${f.q} ${f.a}`)].join(" ");
+  const allText = [a.title, a.summary, a.body_html].join(" ");
   for (const re of BANNED) if (re.test(allText)) problems.push(`banned phrase: ${re}`);
   return problems;
 }

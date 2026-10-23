@@ -9,7 +9,7 @@ Cron (08:13 WITA) → Worker → PublishWorkflow
   2. dedupe vs existing posts
   3. load related posts (internal link)
   4. Claude agent: web_search + web_fetch → submit_post (JSON)   [retried on its own]
-  5. validate + sanitize + build HTML (address table, map, FAQ, Hotel/FAQ JSON-LD)
+  5. validate + sanitize + build HTML (address block, map, Hotel JSON-LD)
   6. Blogger posts.insert (draft or live, with labels + location)   [idempotent]
   7. log to D1 + notify Telegram/Discord
 ```
@@ -111,7 +111,7 @@ Check the draft in Blogger. When a few in a row look right, set `PUBLISH_MODE` t
 
 - **Writing style / structure**: edit `STYLE_GUIDE` in `src/agent.ts`.
 - **Quality gates**: `checkArticle` in `src/validate.ts` (word count, banned phrases, Bali bounds, sources).
-- **Post layout**: `src/template.ts` (info table, map embed, FAQ, JSON-LD).
+- **Post layout**: `src/template.ts` (address block, map embed, JSON-LD; layout follows `sample.html`).
 - **Posts per day**: `POSTS_PER_RUN`. Keep it modest; quality beats volume for a directory blog.
 - **Cost control**: the agent is capped at 6 searches, 6 fetches and 8 turns per hotel. `/status` shows tokens per run.
 
